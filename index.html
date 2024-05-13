@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom GST Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body{
+            background-color: greenyellow;
+        }
+        .container {
+            max-width: 600px;
+            
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .custom-heading {
+            text-align: center;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="custom-heading"><br>GST Calculator</h1>
+        <form id="gstCalculatorForm" method="POST">
+            <div class="form-group">
+                <label for="product">Select Product:</label>
+                <select id="product" class="form-control">
+                    <option value="0" selected disabled>Select an item</option>
+                    <option value="Redmi">Redmi</option>
+                    <option value="One plus">One plus</option>
+                    <option value="Vivo">Vivo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Enter Price (per item):</label>
+                <input type="number" id="price" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="quantity">Enter Quantity:</label>
+                <input type="number" id="quantity" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="customerName">Customer Name:</label>
+                <input type="text" id="customerName" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="paymentMethod">Payment Method:</label>
+                <select id="paymentMethod" class="form-control">
+                    <option value="cash">Cash</option>
+                    <option value="card">GPay</option>
+                </select>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Calculate GST</button>
+            </div>
+        </form>
+        <div id="result" class="mt-3"></div>
+    </div>
+    <script>
+        var items = {
+            "Redmi": 8,
+            "One plus": 12,
+            "Vivo": 18,
+        };
+
+        document.getElementById("gstCalculatorForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            calculateGST();
+        });
+
+        function calculateGST() {
+            var item = document.getElementById('product').value;
+            var selectedItem = item;
+            var gstRate = items[selectedItem];
+            var price = parseFloat(document.getElementById('price').value);
+            var quantity = parseInt(document.getElementById('quantity').value);
+            var customerName = document.getElementById('customerName').value;
+            var paymentMethod = document.getElementById('paymentMethod').value;
+    
+            if (isNaN(price) || isNaN(quantity) || isNaN(gstRate)) {
+                document.getElementById('result').innerHTML = "<p class='text-danger'>Please enter valid numbers</p>";
+                return;
+            }
+    
+            var totalAmount = price * quantity;
+            var gstAmount = (totalAmount * gstRate) / 100;
+            var totalPrice = totalAmount + gstAmount;
+    
+            var resultHTML = "<p>Product: " + selectedItem + "</p>" +
+                "<p>Quantity: " + quantity + "</p>" +
+                "<p>Total Price: Rs." + totalAmount.toFixed(2) + "</p>" +
+                "<p>GST Amount: Rs." + gstAmount.toFixed(2) + "</p>" +
+                "<p>Total Amount (including GST): Rs." + totalPrice.toFixed(2) + "</p>" +
+                
+                "<p>Customer Name: " + customerName + "</p>" +
+                "<p>Payment Method: " + paymentMethod + "</p>";
+    
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
